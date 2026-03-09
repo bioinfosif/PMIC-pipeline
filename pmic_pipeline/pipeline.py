@@ -19,6 +19,9 @@ import matplotlib.pyplot as plt
 from Bio import Entrez, SeqIO
 import re
 
+# pipeline version
+__version__ = "1.0.0"
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -33,7 +36,7 @@ def plot_gene(data_gene_file, png_file_plot, title):
         png_file_plot (str): Path to save the plot.
         title (str): Title for the plot.
     """
-    df = pd.read_csv(data_gene_file, sep='\t', index_col='GENE')
+    df = pd.read_csv(data_gene_file, sep=',', index_col='GENE')
     # Filter for coverage >= 60 and identity >= 95
     df = df.loc[(df["%COVERAGE"] >= 60) & (df["%IDENTITY"] >= 95)]
     df_filter = df[['%COVERAGE', '%IDENTITY']]
@@ -103,7 +106,7 @@ def download_plasmid_db(dest_dir):
     dest = Path(dest_dir)
     dest.mkdir(parents=True, exist_ok=True)
     url = 'https://ftp.ncbi.nlm.nih.gov/refseq/release/plasmid/plasmid.1.1.genomic.fna.gz'
-    out_file = dest / 'plasmid.fna.gz'
+    out_file = dest / 'plsdb.fasta.gz'
     logger.info(f"Downloading plasmid database to {out_file}")
     download_file(url, str(out_file))
     logger.info("Plasmid database download complete.")
@@ -152,15 +155,8 @@ def download_reference(accession, output_file):
 
 def parse_mash_accession(line):
     """
-    Extract the accession part from a mash output line containing
-    "genomic.fna.gz:". The text after the colon may include an optional
-    bracketed sequence count, e.g.
-
-        genomic.fna.gz:[1870 seqs] NC_004354.4
-        genomic.fna.gz:NC_012967.1
-
-    This function returns the accession (e.g. "NC_004354.4" or
-    "NC_012967.1"). Raises ValueError if the pattern cannot be matched.
+    Extract accession text from a mash output line that follows
+    "genomic.fna.gz:". Handles optional bracketed counts.
     """
     m = re.search(r'genomic\.fna\.gz:(?:\[[^\]]+\]\s*)?(?P<acc>\S+)', line)
     if not m:
@@ -209,7 +205,7 @@ def run_mapping(reference, reads1, reads2, output_prefix, threads=12, rg_id=None
     # Index sorted BAM
     run_command(['samtools', 'index', sorted_bam])
 
-    # Mark duplicates using new Picard syntax and require read groups
+    # Mark duplicates using new Picard syntax
     markdup_bam = f"{output_prefix}_markdup.bam"
     metrics_file = f"{output_prefix}_metrics.txt"
     run_command(['picard', 'MarkDuplicates', '-I', sorted_bam, '-O', markdup_bam, '-M', metrics_file])
@@ -277,8 +273,7 @@ def get_plasmid_db_path():
     """Return the filesystem path to the plasmid BLAST database.
 
     Uses the BLASTDB environment variable if set, otherwise defaults to
-    "$HOME/blastdb/plsdb". This ensures any user can run the pipeline
-    without hardcoding a specific home directory.
+    "$HOME/blastdb/plsdb".
     """
     base = os.environ.get('BLASTDB', os.path.expanduser('~/blastdb'))
     return str(Path(base) / 'plsdb')
@@ -338,7 +333,8 @@ def process_illumina_sample(sample_name, forward, reverse, output_dir, threads=1
 
         if plasmid_blast.stat().st_size > 0:
             # Get reference accession (2nd field in BLAST CSV: sseqid)
-            result = run_command(['awk', '-F,', '{print $2}', str(plasmid_blast)])
+            result = run_command(['awk', '-F","', '{print $2}', str(plasmid_blast)])
+            
             accessions = result.stdout.strip().split('\n')
             # Skip header if present, take the first result's accession
             ref_accession = accessions[1] if len(accessions) > 1 else accessions[0]
@@ -347,7 +343,7 @@ def process_illumina_sample(sample_name, forward, reverse, output_dir, threads=1
             ref_fasta = output_path / f"{sample_name}_plasmid_reference{num}.fasta"
             download_reference(ref_accession, str(ref_fasta))
 
-            # Mapping (include read-group tags so Picard MarkDuplicates can run)
+            # Mapping
             bam_prefix = output_path / f"{sample_name}_plasmid{num}"
             markdup_bam = run_mapping(str(ref_fasta), forward, reverse, str(bam_prefix), threads,
                                       rg_id=sample_name + f"_plasmid{num}", rg_sm=sample_name)
@@ -388,9 +384,8 @@ def process_illumina_sample(sample_name, forward, reverse, output_dir, threads=1
     tri_distance_chr.to_csv(str(tri_distance_csv))
 
     # Get accession
-    result = run_command(['awk', '-F","', '{print $1}', str(tri_distance_csv)])
+    result = run_command(['awk', '-F","', '{print $2}', tri_distance_csv])
     accessions = result.stdout.strip().split('\n')
-    # find the first line containing the genome indicator
     line = next((l for l in accessions[1:] if 'genomic.fna.gz:' in l), None)
     if line is None:
         raise ValueError("No line containing 'genomic.fna.gz:' found in the first column")
@@ -546,19 +541,19 @@ def setup_databases():
     from pathlib import Path
     import os
 
-    blastdb_dir = Path(os.path.expanduser('/home/genomic/blastdb'))
+    blastdb_dir = Path(os.path.expanduser('~/blastdb'))
     blastdb_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info("Downloading Mash RefSeq database")
 
     mash_url = "https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh"
-    
-    run_command([
+
+    """run_command([
         "wget",
         "-O",
         "refseq.genomes.k21s1000.msh",
         mash_url
-    ])
+    ])"""
 
     logger.info("Downloading NCBI plasmid database")
 
@@ -566,19 +561,19 @@ def setup_databases():
 
     plasmid_fna_gz = blastdb_dir / "plsdb.fasta.gz"
 
-    run_command([
+    """run_command([
         "wget",
         "-O",
         str(plasmid_fna_gz),
         plasmid_url
-    ])
+    ])"""
 
     plasmid_fna = blastdb_dir / "plsdb.fasta"
 
-    run_command([
+    """run_command([
         "gunzip",
         str(plasmid_fna_gz)
-    ])
+    ])"""
 
     logger.info("Creating BLAST database")
 
@@ -644,6 +639,8 @@ def main():
         setup_databases()
         sys.exit(0)
 
+    logger.info(f"PMIC pipeline version {__version__}")
+
     # -in and -out are required for normal pipeline runs
     if not args.input or not args.output:
         parser.error("Arguments -in/--input and -out/--output are required unless --download-databases is used")
@@ -680,8 +677,7 @@ def main():
         logger.info("Running Nanopore pipeline")
         samples = [f for f in input_dir.iterdir() if f.is_file()]
         for sample_file in samples:
-            # use the filename without its extension(s) as sample name
-            # e.g. "sample_name.fastq.gz" -> "sample_name"
+            # derive name from filename without extension
             sample_name = sample_file.stem
             process_nanopore_sample(sample_name, str(sample_file), str(output_dir), args.threads)
     else:

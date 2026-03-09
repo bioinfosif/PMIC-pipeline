@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pmic-pipeline"
+version = "1.0.0"
+description = "Bioinformatics pipeline for antimicrobial resistance detection"
+authors = [
+  {name="Mamadou Ndao", email="ndaom403@gmail.com"}
+]
+
+dependencies = [
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "biopython"
+]
+
+[project.scripts]
+pmic-pipeline = "pmic_pipeline.pipeline:main"
+
+[tool.setuptools.packages.find]
+include = ["pmic_pipeline*"]

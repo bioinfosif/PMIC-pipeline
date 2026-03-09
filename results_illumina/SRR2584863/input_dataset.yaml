@@ -1,0 +1,7 @@
+- "left reads":
+  - "/home/genomic/Documents/PMIC_projet/PMIC-pipeline/test_illumina_data/SRR2584863_R1.fastq.gz"
+  "number": !!int "1"
+  "orientation": "fr"
+  "right reads":
+  - "/home/genomic/Documents/PMIC_projet/PMIC-pipeline/test_illumina_data/SRR2584863_R2.fastq.gz"
+  "type": "paired-end"

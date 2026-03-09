@@ -1,0 +1,21 @@
+name: pmic_pipeline
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - matplotlib
+  - biopython
+  - spades
+  - bwa
+  - samtools
+  - bcftools
+  - mash
+  - blast
+  - flye
+  - picard
+  - abricate

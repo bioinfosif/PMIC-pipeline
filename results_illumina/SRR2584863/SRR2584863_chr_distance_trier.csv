@@ -1,0 +1,6 @@
+,Query_ID,Query_samples,Query_dist,Median_multiplicity,Shared_hashes
+637,"GCF_000017985.1_ASM1798v1_genomic.fna.gz:NC_012967.1 Escherichia coli B str. REL606, complete genome",results_illumina/SRR2584863/dna_samples.fastq.gz:[3106518 seqs] SRR2584863.1 HWI-ST957:244:H73TDADXX:1:1101:4712:2181/1 [...],0.00928558,0.0,699/1000
+30016,"GCF_000833145.1_ASM83314v1_genomic.fna.gz:NZ_CP010816.1 Escherichia coli strain BL21 (TaKaRa), complete genome",results_illumina/SRR2584863/dna_samples.fastq.gz:[3106518 seqs] SRR2584863.1 HWI-ST957:244:H73TDADXX:1:1101:4712:2181/1 [...],0.0101459,0.0,678/1000
+861,"GCF_000022665.1_ASM2266v1_genomic.fna.gz:NC_012971.2 Escherichia coli BL21(DE3), complete genome",results_illumina/SRR2584863/dna_samples.fastq.gz:[3106518 seqs] SRR2584863.1 HWI-ST957:244:H73TDADXX:1:1101:4712:2181/1 [...],0.0105688,0.0,668/1000
+29894,"GCF_000830035.1_ASM83003v1_genomic.fna.gz:NZ_CP010585.1 Escherichia coli strain C41(DE3), complete genome",results_illumina/SRR2584863/dna_samples.fastq.gz:[3106518 seqs] SRR2584863.1 HWI-ST957:244:H73TDADXX:1:1101:4712:2181/1 [...],0.0105688,0.0,668/1000
+63011,"GCF_001596115.1_ASM159611v1_genomic.fna.gz:NZ_CP014768.1 Shigella sp. PAMC 28760, complete genome",results_illumina/SRR2584863/dna_samples.fastq.gz:[3106518 seqs] SRR2584863.1 HWI-ST957:244:H73TDADXX:1:1101:4712:2181/1 [...],0.0105688,0.0,668/1000

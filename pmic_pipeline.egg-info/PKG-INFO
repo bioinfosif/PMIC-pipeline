@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: pmic-pipeline
+Version: 1.0.0
+Summary: Bioinformatics pipeline for antimicrobial resistance detection
+Author-email: Mamadou Ndao <ndaom403@gmail.com>
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: biopython

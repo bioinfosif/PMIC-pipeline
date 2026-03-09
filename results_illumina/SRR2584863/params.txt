@@ -1,0 +1,35 @@
+Command line: /home/genomic/miniconda3/envs/pmic_pipeline/bin/spades.py	-t	28	--only-assembler	--plasmid	-1	/home/genomic/Documents/PMIC_projet/PMIC-pipeline/test_illumina_data/SRR2584863_R1.fastq.gz	-2	/home/genomic/Documents/PMIC_projet/PMIC-pipeline/test_illumina_data/SRR2584863_R2.fastq.gz	-o	/home/genomic/Documents/PMIC_projet/PMIC-pipeline/results_illumina/SRR2584863	
+
+System information:
+  SPAdes version: 4.0.0
+  Python version: 3.13.2
+  OS: Linux-6.8.0-101-generic-x86_64-with-glibc2.39
+
+Output dir: /home/genomic/Documents/PMIC_projet/PMIC-pipeline/results_illumina/SRR2584863
+Mode: ONLY assembling (without read error correction)
+Debug mode is turned OFF
+
+Dataset parameters:
+  Standard mode
+  For multi-cell/isolate data we recommend to use '--isolate' option; for single-cell MDA data use '--sc'; for metagenomic data use '--meta'; for RNA-Seq use '--rna'.
+  Reads:
+    Library number: 1, library type: paired-end
+      orientation: fr
+      left reads: ['/home/genomic/Documents/PMIC_projet/PMIC-pipeline/test_illumina_data/SRR2584863_R1.fastq.gz']
+      right reads: ['/home/genomic/Documents/PMIC_projet/PMIC-pipeline/test_illumina_data/SRR2584863_R2.fastq.gz']
+      interlaced reads: not specified
+      single reads: not specified
+      merged reads: not specified
+Assembly parameters:
+  k: automatic selection based on read length
+  Extrachromosomal mode is turned ON
+  Repeat resolution is enabled
+  Mismatch careful mode is turned OFF
+  MismatchCorrector will be SKIPPED
+  Coverage cutoff is turned OFF
+  Assembly graph output will use GFA v1.2 format
+Other parameters:
+  Dir for temp files: /home/genomic/Documents/PMIC_projet/PMIC-pipeline/results_illumina/SRR2584863/tmp
+  Threads: 28
+  Memory limit (in Gb): 31
+

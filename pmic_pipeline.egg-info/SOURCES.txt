@@ -1,9 +1,0 @@
-pyproject.toml
-pmic_pipeline/__init__.py
-pmic_pipeline/pipeline.py
-pmic_pipeline.egg-info/PKG-INFO
-pmic_pipeline.egg-info/SOURCES.txt
-pmic_pipeline.egg-info/dependency_links.txt
-pmic_pipeline.egg-info/entry_points.txt
-pmic_pipeline.egg-info/requires.txt
-pmic_pipeline.egg-info/top_level.txt

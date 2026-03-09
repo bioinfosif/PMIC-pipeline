@@ -1,2 +1,0 @@
-[console_scripts]
-pmic-pipeline = pmic_pipeline.pipeline:main
